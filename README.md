@@ -15,13 +15,13 @@ Starting from scratch (i.e. implementing a new dynamical system), one must code 
 The previous instructions implement the dynamical system, but a dynamical system file must be created to use it. This can be done with the `create_sys.py` script. To create the file run:
 
 ```
-    $ python3 create_sys.py system_name file_path --params param_vals
+$ python3 create_sys.py system_name file_path --params param_vals
 ```
 
 For example, for the Lorenz system with `beta=2.0`, `rho=28.0`, `sigma=10.0`; and store it in the dynsystems folder with the name `lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys`, run:
 
 ```
-    $ python3 create_sys.py lorenz63 dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys --params 2.0 28.0 10.0 
+$ python3 create_sys.py lorenz63 dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys --params 2.0 28.0 10.0 
 ```
 
 The created file is a json file and the extension `.sys` is arbitrary.
@@ -32,24 +32,24 @@ The created file is a json file and the extension `.sys` is arbitrary.
 With the dynamical system implemented and the system file created, you can create a dataset, i.e. the numerical solution obtained from time-integrating the dynamical system. To create the dataset, run:
 
 ```
-    $ python3 create_ds.py N norm_name dt integ_name system_fp file_path [--rand_seed rand_seed]
+$ python3 create_ds.py N norm_name dt integ_name system_fp file_path [--rand_seed rand_seed]
 ```
 
 Arguments:
 
-    - `N`            number of time steps
-    - `norm_name`    name of the data normalization (see ### Normalisation)
-    - `dt`           time step
-    - `integ_name`   name of the integrator (see ### Integrators)
-    - `system_fp`    filepath of the dynamical system file (e.g. in the example of the previous section, it would be dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys)
-    - `file_path`    filepath of the dataset file being created
+- `N`            number of time steps
+- `norm_name`    name of the data normalization (see ### Normalisation)
+- `dt`           time step
+- `integ_name`   name of the integrator (see ### Integrators)
+- `system_fp`    filepath of the dynamical system file (e.g. in the example of the previous section, it would be dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys)
+- `file_path`    filepath of the dataset file being created
 
 The optional argument `--rand_seed rand_seed` is the seed to generate the random initial condition.
 
 For example, to create a dataset with `1000` time steps, `max_minus_min` normalization, a `0.01` time step, `wray_rk` integrator, using the dynamical system file `dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys`, and with an initial condition random seed `0`; to be stored in `datasets/` with the name `lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds`, run:
 
 ```
-    $ python3 create_ds.py 1000 max_minus_min 0.01 wray_rk dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys datasets/lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds --rand_seed 0
+$ python3 create_ds.py 1000 max_minus_min 0.01 wray_rk dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys datasets/lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds --rand_seed 0
 ```
 
 The created file is an h5 file and the extension `.ds` is arbitrary.
@@ -68,31 +68,31 @@ The time integrators are implemented in `base/Integrators.py`. Currently, there 
 To create an ESN, one must run the `create_esn.py` script:
 
 ```
-    $ python3 create_esn.py N_units N_dim rho sigma_in file_path
+$ python3 create_esn.py N_units N_dim rho sigma_in file_path
 ```
 
 Arguments:
 
-    - `N_units`     size of the reservoir
-    - `N_dim`       size of the input/output of the network
-    - `rho`         spectral radius of W
-    - `sigma_in`    input scaling parameter
-    - `file_path`   filepath of ESN file being created
+- `N_units`     size of the reservoir
+- `N_dim`       size of the input/output of the network
+- `rho`         spectral radius of W
+- `sigma_in`    input scaling parameter
+- `file_path`   filepath of ESN file being created
 
 You can also include the following optional arguments:
 
-    - `--sparseness sp`         sp is the reservoir sparseness, between 0 and 1. If omitted, the sparseness will be 1-3/(N_units-1)
-    - `--bias_in b_in`          b_in is the input bias
-    - `--bias_out b_out`        b_out is the output bias
-    - `--rand_seed rand_seed`   rand_seed is the random seed to generate the "random" reservoir`
-    - `--phys system`           see "Hybrid Echo State Network"
-    - `--Gamma Gamma`           see "Hybrid Echo State Network"
-    - `--esn_type esn_type`     esn_type is normal for normal/conventional ESN or hybrid for hybrid ESN (see "Hybrid Echo State Network")
+- `--sparseness sp`         sp is the reservoir sparseness, between 0 and 1. If omitted, the sparseness will be 1-3/(N_units-1)
+- `--bias_in b_in`          b_in is the input bias
+- `--bias_out b_out`        b_out is the output bias
+- `--rand_seed rand_seed`   rand_seed is the random seed to generate the "random" reservoir
+- `--phys system`           see "Hybrid Echo State Network"
+- `--Gamma Gamma`           see "Hybrid Echo State Network"
+- `--esn_type esn_type`     esn_type is normal for normal/conventional ESN or hybrid for hybrid ESN (see "Hybrid Echo State Network")
 
 For example, to create a network with 100 nodes, 3-dimensional output (e.g. to predict the Lorenz system), `rho=0.3` and `sigma_in=1.0`, an output bias of `1.0` and the random seed `0`, to be stored in `networks/` with the name `Nx_100_Nd_3.esn`, run:
 
 ```
-    $ python3 create_esn.py 100 3 0.3 1.0 networks/Nx_100_Nd_3.esn --bias_out 1.0 --rand_seed 0
+$ python3 create_esn.py 100 3 0.3 1.0 networks/Nx_100_Nd_3.esn --bias_out 1.0 --rand_seed 0
 ```
 
 ### Hybrid Echo State Network
@@ -102,13 +102,13 @@ To create an hESN, which uses knowledge from a dynamical system (e.g. a ROM), on
 For example, for the Lorenz system, we'll use a system where the physical parameter beta is slightly wrong (e.g. measurement error) at 2.1 instead of 2.0. To do that, we must first create the dynamical system file with `beta=2.1`.
 
 ```
-    $ python3 create_sys.py lorenz63 dynsystems/lorenz63_beta_2p1_rho_28p0_sigma_10p0.sys --params 2.1 28.0 10.0 
+$ python3 create_sys.py lorenz63 dynsystems/lorenz63_beta_2p1_rho_28p0_sigma_10p0.sys --params 2.1 28.0 10.0 
 ```
 
 Now, we can create the hESN:
 
 ```
-    $ python3 create_esn.py 100 3 0.3 1.0 networks/Nx_100_Nd_3_K_beta_2p1.hesn --rand_seed 0 --phys dynsystems/lorenz63_beta_2p1_rho_28p0_sigma_10p0.sys --Gamma 0.2 --esn_type hybrid
+$ python3 create_esn.py 100 3 0.3 1.0 networks/Nx_100_Nd_3_K_beta_2p1.hesn --rand_seed 0 --phys dynsystems/lorenz63_beta_2p1_rho_28p0_sigma_10p0.sys --Gamma 0.2 --esn_type hybrid
 ```
 
 Notice the omission of the output bias. In many cases, this can be done because the knowledge model already provides an implicit bias. The argument `--Gamma Gamma` is the the fraction of reservoir nodes that receive their input from the knowledge model instead of the network's input.
@@ -121,46 +121,47 @@ In this case, the knowledge model has the same dimension as the dynamical system
 A case is a combination of dynamical system, dataset and network. To create it, run:
 
 ```
-    $ python3 create_case.py esn_file_path ds_file_path N_train N_skip tikh file_path
+$ python3 create_case.py esn_file_path ds_file_path N_train N_skip tikh file_path
 ```
 
 Arguments:
 
-    - `esn_file_path`       filepath of the network
-    - `ds_file_path`        filepath of the dataset
-    - `N_train`             number of training samples
-    - `N_skip`              number of ESN transient steps
-    - `tikh`                Tikhonov factor
-    - `file_path`           filepath of case file being created
+- `esn_file_path`       filepath of the network
+- `ds_file_path`        filepath of the dataset
+- `N_train`             number of training samples
+- `N_skip`              number of ESN transient steps
+- `tikh`                Tikhonov factor
+- `file_path`           filepath of case file being created
 
 Note that `N_train+N_skip+1` must be no larger than the number of samples in the dataset. Ideally, the dataset should be long enough to cover training, skip, validation and test phases, though only the first two are mandatory.
 
 Continuing the example, we'll create two cases, one for the conventional ESN and one for the hESN:
 
 ```
-    $ python3 create_case.py networks/Nx_100_Nd_3.esn datasets/lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds 1000 100 1e-9 cases/lorenz.case
-    $ python3 create_case.py networks/Nx_100_Nd_3_K_beta_2p1.hesn datasets/lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds 1000 100 1e-9 cases/lorenz_hybrid.case
+$ python3 create_case.py networks/Nx_100_Nd_3.esn datasets/lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds 1000 100 1e-9 cases/lorenz.case
+$ python3 create_case.py networks/Nx_100_Nd_3_K_beta_2p1.hesn datasets/lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds 1000 100 1e-9 cases/lorenz_hybrid.case
 ```
 
 ## Training
 
 There are two ways to train the network:
-    - `train_fixed.py`: fixed hyperparameters (`rho` and `sigma_in`), i.e. use the hyperparameter values set when the network file was created.
-    - `train_auto.py`: automatic hyperparameter tuning, i.e. `rho` and `sigma_in` are varied and automatically selected, using Bayesian optimisation.
+
+- `train_fixed.py`: fixed hyperparameters (`rho` and `sigma_in`), i.e. use the hyperparameter values set when the network file was created.
+- `train_auto.py`: automatic hyperparameter tuning, i.e. `rho` and `sigma_in` are varied and automatically selected, using Bayesian optimisation.
 
 To do this, run:
 
 ```
-    $ python3 script.py case_file_path N_valid [--esn_type esn_type]
+$ python3 script.py case_file_path N_valid [--esn_type esn_type]
 ```
 
 where `script.py` is `train_fixed.py` or `train_auto.py`, depending on what method is to be used.
 
 Arguments:
 
-    - `case_file_path`      filepath of the case
-    - `N_valid`             number of validation steps (to calculate validation MSE)
-    - `--esn_type`          normal or hybrid (optional)
+- `case_file_path`      filepath of the case
+- `N_valid`             number of validation steps (to calculate validation MSE)
+- `--esn_type`          normal or hybrid (optional)
 
 For example:
 
