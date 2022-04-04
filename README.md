@@ -1,6 +1,12 @@
+# esn4phys
+
 `esn4phys` is an implementation of leakless echo state networks and variants, such as the hybrid echo state network, for the prediction of physical systems, usually chaotic.
 
-# esn4phys
+Echo state networks (ESN) [1] are recurrent neural networks (RNN) where only the output weights are trained. This makes training very easy, as the training problem reduces to ridge regression. ESNs are also usually sparse, which is also beneficial in computational cost. A practical guide on the use of ESNs can be found in [2].
+
+This project incldues implementations of the (leakless conventional echo state network and the hybrid echo state network (hESN) [3]. In the hESN, the reservoir of the ESN is complemented wth physical knowledge in the form of a dynamical system (e.g. a reduced-order model), which usually results in increased performance [4]. Additionally, it also includes the `tanh` variant of the hESN [4].
+
+The ESN code is structured in a way that variants can be easily built upon it.
 
 ## Structure
 
@@ -166,8 +172,8 @@ Arguments:
 For example:
 
 ```
-    $ python3 train_Wout.py cases/lorenz.case 500
-    $ python3 bayesian_train.py cases/lorenz_hybrid.case 500 --esn_type hybrid
+$ python3 train_Wout.py cases/lorenz.case 500
+$ python3 bayesian_train.py cases/lorenz_hybrid.case 500 --esn_type hybrid
 ```
 
 ## Plotting or generating results
@@ -176,12 +182,12 @@ Jupyter notebooks are a good tool for plotting and result generation and analysi
 
 ## References
 
-- http://www.scholarpedia.org/w/index.php?title=Echo_state_network
+- [1] http://www.scholarpedia.org/w/index.php?title=Echo_state_network
 
-- Lukoševičius, M. 2012 A Practical Guide to Applying Echo State Networks, pp. 659–686. Springer Berlin Heidelberg.
+- [2] Lukoševičius, M. 2012 A Practical Guide to Applying Echo State Networks, pp. 659–686. Springer Berlin Heidelberg.
 
-- Pathak, J. et al. 2018 Hybrid forecasting of chaotic processes: Using machine learning
+- [3] Pathak, J. et al. 2018 Hybrid forecasting of chaotic processes: Using machine learning
 in conjunction with a knowledge-based model. Chaos: An Interdisciplinary Journal
 of Nonlinear Science 28 (4), 041101.
 
-- Huhn, F. and Magri, L. 2022 Gradient-free optimization of chaotic acoustics with reservoir computing. Phys. Rev. Fluids 7, 014402.
+- [4] Huhn, F. and Magri, L. 2022 Gradient-free optimization of chaotic acoustics with reservoir computing. Phys. Rev. Fluids 7, 014402.
