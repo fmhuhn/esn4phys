@@ -5,9 +5,11 @@ os.environ['OMP_NUM_THREADS'] = '1'
 
 import h5py
 import numpy as np
+from scipy import sparse
 
 class EchoStateNetwork:
     ACTIVATIONS = {'tanh': np.tanh}
+    SPARSENESS_LIM = 0.1
 
     def __init__(self, N_units, N_dim, rho, sparseness, sigma_in, activation_name,
                  bias_in=None, bias_out=None, Win=None, W=None, rand=None,
@@ -62,8 +64,14 @@ class EchoStateNetwork:
         """
 
         res_in = np.hstack((self.bias_in, u)) if self.bias_in else u
-        new_x = self.activation(np.dot(res_in, self.sigma_in*self.Win) + np.dot(x, self.rho*self.W))
-            
+        # print(res_in.shape)
+        # print(self.Win.shape)
+        # new_x = self.activation(np.dot(res_in, self.sigma_in*self.Win) + np.dot(x, self.rho*self.W))
+        # print(res_in.shape, self.Win.shape)
+        # print(x.shape, self.W.shape)
+        # exit()
+        new_x = self.activation(self.sigma_in * self.Win.dot(res_in) + self.rho * self.W.dot(x))
+
         new_xa = np.hstack((new_x, self.bias_out)) if self.bias_out else new_x
 
         return new_xa, new_x
@@ -91,6 +99,10 @@ class EchoStateNetwork:
             var_index = self.rand.randint(0, self.N_dim+d_bias)
             Win[var_index,i] = self.rand.uniform(-1, 1)
 
+        Win = Win.T
+
+        Win = sparse.csr_matrix(Win)
+
         return Win
 
     def build_W(self):
@@ -114,6 +126,10 @@ class EchoStateNetwork:
         # Re-scale W's spectral radius to self.rho
         eigvals = np.abs(np.linalg.eigvals(W_sparse))
         W = W_sparse / eigvals.max()
+        W = W.T
+
+        if self.sparseness < self.SPARSENESS_LIM:
+            W = sparse.csr_matrix(W)
 
         return W
 
@@ -137,8 +153,8 @@ class EchoStateNetwork:
             if self.bias_out:
                 hf.attrs['bias_out'] = self.bias_out
 
-            hf.create_dataset('Win', data=self.Win)
-            hf.create_dataset('W', data=self.W)
+            hf.create_dataset('Win', data=self.Win.toarray().T)
+            hf.create_dataset('W', data=self.W.toarray().T if isinstance(self.W, sparse.csr_matrix) else W.T)
 
             # TODO: save rand state
 
@@ -160,8 +176,10 @@ class EchoStateNetwork:
             bias_in = hf.attrs['bias_in'] if 'bias_in' in hf.attrs.keys() else None
             bias_out = hf.attrs['bias_out'] if 'bias_out' in hf.attrs.keys() else None
 
-            Win = hf['Win'][:]
-            W = hf['W'][:]
+            Win = sparse.csr_matrix(hf['Win'][:].T)
+            W = hf['W'][:].T
+            if sparseness < EchoStateNetwork.SPARSENESS_LIM:
+                W = sparse.csr_matrix(W)
 
         return EchoStateNetwork(N_units, N_dim, rho, sparseness, sigma_in,
                 activation_name, bias_in, bias_out, Win, W, None, file_path)
