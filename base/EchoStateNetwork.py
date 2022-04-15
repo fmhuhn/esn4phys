@@ -9,7 +9,7 @@ from scipy import sparse
 
 class EchoStateNetwork:
     ACTIVATIONS = {'tanh': np.tanh}
-    SPARSENESS_LIM = 0.1
+    SPARSENESS_LIM = 0.9
 
     def __init__(self, N_units, N_dim, rho, sparseness, sigma_in, activation_name,
                  bias_in=None, bias_out=None, Win=None, W=None, rand=None,
@@ -128,7 +128,7 @@ class EchoStateNetwork:
         W = W_sparse / eigvals.max()
         W = W.T
 
-        if self.sparseness < self.SPARSENESS_LIM:
+        if self.sparseness > self.SPARSENESS_LIM:
             W = sparse.csr_matrix(W)
 
         return W
@@ -154,7 +154,7 @@ class EchoStateNetwork:
                 hf.attrs['bias_out'] = self.bias_out
 
             hf.create_dataset('Win', data=self.Win.toarray().T)
-            hf.create_dataset('W', data=self.W.toarray().T if isinstance(self.W, sparse.csr_matrix) else W.T)
+            hf.create_dataset('W', data=self.W.toarray().T if isinstance(self.W, sparse.csr_matrix) else self.W.T)
 
             # TODO: save rand state
 
@@ -178,7 +178,7 @@ class EchoStateNetwork:
 
             Win = sparse.csr_matrix(hf['Win'][:].T)
             W = hf['W'][:].T
-            if sparseness < EchoStateNetwork.SPARSENESS_LIM:
+            if sparseness > EchoStateNetwork.SPARSENESS_LIM:
                 W = sparse.csr_matrix(W)
 
         return EchoStateNetwork(N_units, N_dim, rho, sparseness, sigma_in,
