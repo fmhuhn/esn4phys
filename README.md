@@ -12,7 +12,7 @@ The ESN code is structured in a way that variants can be easily built upon it.
 
 The code of this project is split into base and scripts. The base folder contains all the "core" code of the project (e.g. `Case`, `Dataset`, `DynamicalSystem`, `EchoStateNetwork`, etc.). The scripts are in the root directory of the project and they are `train_XXXXX.py` (e.g `train_fixed.py`), which train the network, and `create_XXXXX.py` scripts (e.g. `create_case.py`), which create the necessary datasets, ESNs, dynamical systems, etc. files.
 
-You will see that the root contains four other directories, apart from `base/`, each one to store cases, datasets, dynamical systems and network files. That's not mandatory, as the files can be located anywhere. Just make sure you don't move them/rename them, because you will break the links between files.
+The folder `tests/` contains simple examples of predictions. It has four directories, each one to store cases, datasets, dynamical systems and network files. It's not mandatory, as the files can be located anywhere. Just make sure not to move them/rename them, because the links between files will be broken.
 
 ## Dynamical System
 
@@ -24,7 +24,7 @@ The previous instructions implement the dynamical system, but a dynamical system
 $ python3 create_sys.py system_name file_path --params param_vals
 ```
 
-For example, for the Lorenz system with `beta=2.0`, `rho=28.0`, `sigma=10.0`; and store it in the dynsystems folder with the name `lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys`, run:
+For example, for the Lorenz system with `beta=2.0`, `rho=28.0`, `sigma=10.0`; and store it in the `dynsystems/` folder (in `tests/`) with the name `lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys`, run:
 
 ```
 $ python3 create_sys.py lorenz63 dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys --params 2.0 28.0 10.0 
@@ -178,7 +178,7 @@ $ python3 bayesian_train.py cases/lorenz_hybrid.case 500 --esn_type hybrid
 
 ## Plotting or generating results
 
-Jupyter notebooks are a good tool for plotting and result generation and analysis. For example, `in lorenz_predictions.ipynb`, the predictions of the two example cases (`cases/lorenz.case` and `cases/lorenz_hybrid.case`) are compared against the test set (what's left over in the dataset after skip, training and validation).
+Jupyter notebooks are a good tool for running, plotting and analysing. For example, in `lorenz_predictions.ipynb`, the predictions of the two example cases (`cases/lorenz.case` and `cases/lorenz_hybrid.case`) are compared against the test set (what's left over in the dataset after skip, training and validation).
 
 ## References
 

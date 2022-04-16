@@ -116,7 +116,7 @@ if __name__ == '__main__':
     if args.esn_type == 'hybrid':
         case.esn.set_physics_numerics(case.ds.integrator, case.ds.dt, case.ds.norm, case.ds.system.convert_data_form)
 
-    case.tikh = 1e-9
+#    case.tikh = 1e-9
     case.N_skip = 500
 
     assert args.N_valid or args.F_valid

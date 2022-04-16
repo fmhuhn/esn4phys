@@ -124,7 +124,7 @@ class HybridEchoStateNetwork(EchoStateNetwork):
                 var_index = self.rand.randint(lo_var, hi_var)
                 Win[var_index,j] = self.rand.uniform(-1, 1)
 
-        return Win
+        return Win.T
 
     def save(self):
         """ Save hybrid echo state network file under the path in

@@ -46,7 +46,6 @@ class EchoStateNetwork:
         self.file_path = file_path
 
         self.Win = self.build_Win() if Win is None else Win
-        # TODO: implement sparse matrix for W
         self.W = self.build_W() if W is None else W
 
         self.activation = EchoStateNetwork.ACTIVATIONS[activation_name]
