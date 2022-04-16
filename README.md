@@ -1,12 +1,12 @@
 # esn4phys
 
-`esn4phys` is an implementation of leakless echo state networks and variants, such as the hybrid echo state network, for the prediction of physical systems, usually chaotic.
+**esn4phys** is an implementation of leakless echo state networks and variants, such as the hybrid echo state network, for the prediction of physical systems, usually chaotic.
 
-Echo state networks (ESN) [1] are recurrent neural networks (RNN) where only the output weights are trained. This makes training very easy, as the training problem reduces to ridge regression. ESNs are also usually sparse, which is also beneficial in computational cost. A practical guide on the use of ESNs can be found in [2].
+Echo state networks (ESN) [1] are recurrent neural networks (RNN) where only the output weights are trained. This makes training easy and cheap, as the training problem reduces to ridge regression. Moreover, the computational cost is also reduced because ESNs are usually sparse. A practical guide on ESNs can be found in [2].
 
-This project incldues implementations of the (leakless conventional echo state network and the hybrid echo state network (hESN) [3]. In the hESN, the reservoir of the ESN is complemented wth physical knowledge in the form of a dynamical system (e.g. a reduced-order model), which usually results in increased performance [4]. Additionally, it also includes the `tanh` variant of the hESN [4].
+This project includes implementations of the (leakless) conventional echo state network and the hybrid echo state network (hESN) [3]. In the hESN, the reservoir of the ESN is complemented wth physical knowledge in the form of a dynamical system (e.g. a reduced-order model), which usually results in increased performance [4]. Additionally, it also includes the tanh variant of the hESN [4].
 
-The ESN code is structured in a way that variants can be easily built upon it.
+The ESN code is structured in a way that variants can be easily built upon it. The project also includes automatic hyperparameter optimisation with Bayesian optimisation [4,5].
 
 ## Structure
 
@@ -87,13 +87,13 @@ Arguments:
 
 You can also include the following optional arguments:
 
-- `--sparseness sp`         sp is the reservoir sparseness, between 0 and 1. If omitted, the sparseness will be 1-3/(N_units-1)
+- `--sparseness sp`         sp is the reservoir sparseness, between 0 and 1. If omitted, the sparseness will be `1-3/(N_units-1)`
 - `--bias_in b_in`          b_in is the input bias
 - `--bias_out b_out`        b_out is the output bias
 - `--rand_seed rand_seed`   rand_seed is the random seed to generate the "random" reservoir
 - `--phys system`           see "Hybrid Echo State Network"
 - `--Gamma Gamma`           see "Hybrid Echo State Network"
-- `--esn_type esn_type`     esn_type is normal for normal/conventional ESN or hybrid for hybrid ESN (see "Hybrid Echo State Network")
+- `--esn_type esn_type`     `esn_type` is `normal` for conventional ESN or `hybrid` for hybrid ESN (see "Hybrid Echo State Network")
 
 For example, to create a network with 100 nodes, 3-dimensional output (e.g. to predict the Lorenz system), `rho=0.3` and `sigma_in=1.0`, an output bias of `1.0` and the random seed `0`, to be stored in `networks/` with the name `Nx_100_Nd_3.esn`, run:
 
@@ -182,12 +182,12 @@ Jupyter notebooks are a good tool for running, plotting and analysing. For examp
 
 ## References
 
-- [1] http://www.scholarpedia.org/w/index.php?title=Echo_state_network
+- [1] Jaeger, H. http://www.scholarpedia.org/w/index.php?title=Echo_state_network
 
 - [2] Lukoševičius, M. 2012 A Practical Guide to Applying Echo State Networks, pp. 659–686. Springer Berlin Heidelberg.
 
-- [3] Pathak, J. et al. 2018 Hybrid forecasting of chaotic processes: Using machine learning
-in conjunction with a knowledge-based model. Chaos: An Interdisciplinary Journal
-of Nonlinear Science 28 (4), 041101.
+- [3] Pathak, J. et al. 2018 Hybrid forecasting of chaotic processes: Using machine learning in conjunction with a knowledge-based model. Chaos: An Interdisciplinary Journal of Nonlinear Science 28 (4), 041101.
 
 - [4] Huhn, F. and Magri, L. 2022 Gradient-free optimization of chaotic acoustics with reservoir computing. Phys. Rev. Fluids 7, 014402.
+
+- [5] Racca, A. & Magri, L. 2021 Robust Optimization and Validation of Echo State Networks for learning chaotic dynamics. Neural Networks 142, 252–268.
