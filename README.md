@@ -27,7 +27,7 @@ $ python3 create_sys.py system_name file_path --params param_vals
 For example, for the Lorenz system with `beta=2.0`, `rho=28.0`, `sigma=10.0`; and store it in the `dynsystems/` folder (in `tests/`) with the name `lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys`, run:
 
 ```
-$ python3 create_sys.py lorenz63 dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys --params 2.0 28.0 10.0 
+$ python3 create_sys.py lorenz63 tests/dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys --params 2.0 28.0 10.0 
 ```
 
 The created file is a json file and the extension `.sys` is arbitrary.
@@ -55,7 +55,7 @@ The optional argument `--rand_seed rand_seed` is the seed to generate the random
 For example, to create a dataset with `1000` time steps, `max_minus_min` normalization, a `0.01` time step, `wray_rk` integrator, using the dynamical system file `dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys`, and with an initial condition random seed `0`; to be stored in `datasets/` with the name `lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds`, run:
 
 ```
-$ python3 create_ds.py 1000 max_minus_min 0.01 wray_rk dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys datasets/lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds --rand_seed 0
+$ python3 create_ds.py 1000 max_minus_min 0.01 wray_rk tests/dynsystems/lorenz63_beta_2p0_rho_28p0_sigma_10p0.sys tests/datasets/lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds --rand_seed 0
 ```
 
 The created file is an h5 file and the extension `.ds` is arbitrary.
@@ -98,7 +98,7 @@ You can also include the following optional arguments:
 For example, to create a network with 100 nodes, 3-dimensional output (e.g. to predict the Lorenz system), `rho=0.3` and `sigma_in=1.0`, an output bias of `1.0` and the random seed `0`, to be stored in `networks/` with the name `Nx_100_Nd_3.esn`, run:
 
 ```
-$ python3 create_esn.py 100 3 0.3 1.0 networks/Nx_100_Nd_3.esn --bias_out 1.0 --rand_seed 0
+$ python3 create_esn.py 100 3 0.3 1.0 tests/networks/Nx_100_Nd_3.esn --bias_out 1.0 --rand_seed 0
 ```
 
 ### Hybrid Echo State Network
@@ -108,13 +108,13 @@ To create an hESN, which uses knowledge from a dynamical system (e.g. a ROM), on
 For example, for the Lorenz system, we'll use a system where the physical parameter beta is slightly wrong (e.g. measurement error) at 2.1 instead of 2.0. To do that, we must first create the dynamical system file with `beta=2.1`.
 
 ```
-$ python3 create_sys.py lorenz63 dynsystems/lorenz63_beta_2p1_rho_28p0_sigma_10p0.sys --params 2.1 28.0 10.0 
+$ python3 create_sys.py lorenz63 tests/dynsystems/lorenz63_beta_2p1_rho_28p0_sigma_10p0.sys --params 2.1 28.0 10.0 
 ```
 
 Now, we can create the hESN:
 
 ```
-$ python3 create_esn.py 100 3 0.3 1.0 networks/Nx_100_Nd_3_K_beta_2p1.hesn --rand_seed 0 --phys dynsystems/lorenz63_beta_2p1_rho_28p0_sigma_10p0.sys --Gamma 0.2 --esn_type hybrid
+$ python3 create_esn.py 100 3 0.3 1.0 tests/networks/Nx_100_Nd_3_K_beta_2p1.hesn --rand_seed 0 --phys tests/dynsystems/lorenz63_beta_2p1_rho_28p0_sigma_10p0.sys --Gamma 0.2 --esn_type hybrid
 ```
 
 Notice the omission of the output bias. In many cases, this can be done because the knowledge model already provides an implicit bias. The argument `--Gamma Gamma` is the the fraction of reservoir nodes that receive their input from the knowledge model instead of the network's input.
@@ -144,8 +144,8 @@ Note that `N_train+N_skip+1` must be no larger than the number of samples in the
 Continuing the example, we'll create two cases, one for the conventional ESN and one for the hESN:
 
 ```
-$ python3 create_case.py networks/Nx_100_Nd_3.esn datasets/lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds 1000 100 1e-9 cases/lorenz.case
-$ python3 create_case.py networks/Nx_100_Nd_3_K_beta_2p1.hesn datasets/lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds 1000 100 1e-9 cases/lorenz_hybrid.case
+$ python3 create_case.py tests/networks/Nx_100_Nd_3.esn tests/datasets/lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds 1000 100 1e-9 tests/cases/lorenz.case
+$ python3 create_case.py tests/networks/Nx_100_Nd_3_K_beta_2p1.hesn tests/datasets/lorenz63_beta_2p0_rho_28p0_sigma_10p0.ds 1000 100 1e-9 tests/cases/lorenz_hybrid.case
 ```
 
 ## Training
@@ -172,8 +172,8 @@ Arguments:
 For example:
 
 ```
-$ python3 train_Wout.py cases/lorenz.case 500
-$ python3 bayesian_train.py cases/lorenz_hybrid.case 500 --esn_type hybrid
+$ python3 train_fixed.py tests/cases/lorenz.case 500
+$ python3 bayesian_train.py tests/cases/lorenz_hybrid.case 500 --esn_type hybrid
 ```
 
 ## Plotting or generating results
